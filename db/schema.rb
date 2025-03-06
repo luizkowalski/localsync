@@ -10,27 +10,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_06_151413) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_06_171035) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "entries", force: :cascade do |t|
     t.string "entry_type"
     t.bigint "space_id", null: false
+    t.bigint "environment_id", null: false
     t.string "contentful_id"
     t.string "content_type_id"
     t.bigint "published_version"
     t.bigint "revision"
+    t.jsonb "fields"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["environment_id"], name: "index_entries_on_environment_id"
     t.index ["space_id"], name: "index_entries_on_space_id"
   end
 
   create_table "environments", force: :cascade do |t|
     t.string "contentful_id"
+    t.bigint "space_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["contentful_id"], name: "index_environments_on_contentful_id", unique: true
+    t.index ["space_id"], name: "index_environments_on_space_id"
   end
 
   create_table "good_job_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -122,17 +127,29 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_06_151413) do
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
 
+  create_table "links", force: :cascade do |t|
+    t.bigint "entry_id", null: false
+    t.bigint "linked_entry_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["entry_id", "linked_entry_id"], name: "index_links_on_entry_id_and_linked_entry_id", unique: true
+    t.index ["entry_id"], name: "index_links_on_entry_id"
+    t.index ["linked_entry_id"], name: "index_links_on_linked_entry_id"
+  end
+
   create_table "spaces", force: :cascade do |t|
     t.string "contentful_id"
-    t.bigint "environment_id", null: false
     t.datetime "last_synced_at"
     t.string "access_token"
     t.string "next_sync_token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["contentful_id"], name: "index_spaces_on_contentful_id", unique: true
-    t.index ["environment_id"], name: "index_spaces_on_environment_id"
   end
 
-  add_foreign_key "spaces", "environments"
+  add_foreign_key "entries", "environments"
+  add_foreign_key "entries", "spaces"
+  add_foreign_key "environments", "spaces"
+  add_foreign_key "links", "entries"
+  add_foreign_key "links", "entries", column: "linked_entry_id"
 end

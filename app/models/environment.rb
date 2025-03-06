@@ -1,3 +1,3 @@
 class Environment < ApplicationRecord
-  has_many :spaces
+  belongs_to :space
 end

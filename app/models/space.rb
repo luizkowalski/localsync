@@ -1,7 +1,7 @@
 class Space < ApplicationRecord
   include Syncable
 
-  belongs_to :environment, optional: true
+  has_many :environments
 
   has_many :entries
 
