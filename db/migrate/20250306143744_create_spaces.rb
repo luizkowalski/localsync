@@ -4,6 +4,7 @@ class CreateSpaces < ActiveRecord::Migration[8.0]
       t.string :contentful_id
       t.references :environment, null: false, foreign_key: true
       t.datetime :last_synced_at
+      t.string :access_token
       t.string :next_sync_token
 
       t.timestamps

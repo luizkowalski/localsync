@@ -126,6 +126,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_06_151413) do
     t.string "contentful_id"
     t.bigint "environment_id", null: false
     t.datetime "last_synced_at"
+    t.string "access_token"
     t.string "next_sync_token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -133,6 +134,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_06_151413) do
     t.index ["environment_id"], name: "index_spaces_on_environment_id"
   end
 
-  add_foreign_key "entries", "spaces"
   add_foreign_key "spaces", "environments"
 end
