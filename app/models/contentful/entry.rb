@@ -6,13 +6,13 @@ module Contentful
     end
 
     def sync
-      entry_type = data["sys"]["type"]
-
-      case entry_type.downcase
+      case entry_type
       when "entry", "asset"
-        ::Entry.new(as_local_data).save!
+        ::Entry.find_or_initialize_by(contentful_id: contentful_id, space:).update!(
+          upstream_data
+        )
       when /^Deleted/
-        ::Entry.find_by(contentful_id: data["sys"]["id"])&.destroy
+        ::Entry.find_by(contentful_id: contentful_id, space:)&.destroy
       end
     end
 
@@ -20,9 +20,41 @@ module Contentful
 
     attr_reader :data, :space
 
-    def as_local_data
+    def contentful_id
+      data["sys"]["id"]
+    end
+
+    def entry_type
+      data["sys"]["type"].downcase
+    end
+
+    def links(hash: data["fields"])
+      return [] unless hash
+
+      extract_links(hash)
+    end
+
+    def extract_links(value)
+      links = []
+
+      case value
+      when Hash
+        links << value if value["sys"]
+
+        value.each_value do |v|
+          links.concat(extract_links(v))
+        end
+      when Array
+        value.each do |item|
+          links.concat(extract_links(item))
+        end
+      end
+
+      links
+    end
+
+    def upstream_data
       {
-        contentful_id: data["sys"]["id"],
         created_at: data["sys"]["createdAt"],
         entry_type: data["sys"]["type"].downcase,
         updated_at: data["sys"]["updatedAt"],

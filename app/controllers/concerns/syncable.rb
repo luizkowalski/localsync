@@ -21,7 +21,7 @@ module Syncable
           url = data["nextPageUrl"] ? "#{data["nextPageUrl"]}&access_token=#{access_token}" : nil
         else
           Rails.logger.error("Failed to fetch data: #{response.status} - #{response.body}")
-          raise "Failed to fetch data: #{response.status} - #{response.body}"
+          raise StandardError, "Failed to fetch data: #{response.status} - #{response.body}"
         end
       end
     end
