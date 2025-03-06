@@ -26,7 +26,7 @@ module Syncable
       end
     end
 
-    items.each { Contentful::Entry.new(it).sync }
+    items.each { |item| Contentful::Entry.new(item, self).sync }
 
     update(last_synced_at: Time.current, next_sync_token: next_sync_token)
   end
