@@ -1,0 +1,5 @@
+master:
+  contentful_id: master
+
+staging:
+  contentful_id: staging

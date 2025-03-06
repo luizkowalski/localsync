@@ -1,0 +1,19 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: localsync_development
+
+test:
+  <<: *default
+  database: localsync_test
+
+production:
+  primary: &primary_production
+    <<: *default
+    database: localsync_production
+    username: localsync
+    password: <%= ENV["LOCALSYNC_DATABASE_PASSWORD"] %>
