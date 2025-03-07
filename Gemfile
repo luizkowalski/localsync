@@ -11,6 +11,7 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 gem "good_job"
 gem "faraday"
+gem "pagy"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

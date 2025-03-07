@@ -1,7 +1,8 @@
 class EntrySerializer
-  def initialize(entries, assets)
+  def initialize(entries, assets, pagy = nil)
     @entries = entries
     @assets  = assets
+    @pagy    = pagy
   end
 
   def to_json
@@ -9,7 +10,9 @@ class EntrySerializer
       sys: {
         type: "Array"
       },
-      total: @entries.count,
+      total: @pagy.count,
+      skip: (@pagy.page - 1) * @pagy.limit,
+      limit: @pagy.limit,
       items: @entries.map do |entry|
         {
           sys: {
