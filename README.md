@@ -41,3 +41,14 @@ To run the tests, you can use the following command:
 ```bash
 bin/rails test
 ```
+
+## Considerations
+
+* Some obvious things are missing like token encryption and pagination in the entries endpoint. While they are important, I believe that this is out of scope for this project (and don't impact my presentation).
+* In a real world scenario, I would probably spend more time normalizing the data (e.g. `fields`). I know that this are customer-provided data hence they don't really have a pattern and normalizing them would be hard and would take a lot of time'.
+* While I didn't normalize `fields`, I maintained the links between entries/assets (see on `app/models/entry.rb#L14`).
+* Some other production features would be needed in a real world scenario like:
+  * Logging
+  * Monitoring
+  * Rate limiting
+  * Caching
