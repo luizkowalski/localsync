@@ -1,9 +1,10 @@
 require "test_helper"
 
-class DeltaUpdateSynchronizationTest < ActionDispatch::IntegrationTest
-  setup do
-    @space = spaces(:synced)
-    @entry = entries(:entry)
+module DeltaUpdate
+  class SynchronizationDeletedTest < ActionDispatch::IntegrationTest
+    setup do
+      @space = spaces(:synced)
+      @entry = entries(:entry)
 
     stub_request(:get, "https://cdn.contentful.com/spaces/yadj1kx9rmg0/sync?access_token=#{@space.access_token}&sync_token=#{@space.next_sync_token}")
       .to_return(status: 200, body: {
@@ -36,5 +37,6 @@ class DeltaUpdateSynchronizationTest < ActionDispatch::IntegrationTest
     assert_no_changes "Entry.asset.count" do
       SyncJob.perform_now(@space)
     end
+  end
   end
 end

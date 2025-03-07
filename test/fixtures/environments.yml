@@ -1,6 +1,7 @@
 master:
   contentful_id: master
   space: synced
+
 staging:
   contentful_id: staging
   space: synced
