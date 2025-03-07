@@ -47,8 +47,8 @@ class EntrySerializer
         }
       end,
       includes: {
-        Asset: IncludesSerializer.new(@entries.flat_map(&:linked_entries).select(&:asset?)).to_json,
-        Entry: IncludesSerializer.new(@entries.flat_map(&:linked_entries).select(&:entry?)).to_json
+        Asset: IncludesSerializer.new(@entries.flat_map(&:linked_entries).uniq.select(&:asset?)).to_json,
+        Entry: IncludesSerializer.new(@entries.flat_map(&:linked_entries).uniq.select(&:entry?)).to_json
       }
     }
   end
