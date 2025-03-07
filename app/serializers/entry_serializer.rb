@@ -1,7 +1,6 @@
 class EntrySerializer
-  def initialize(entries, assets, pagy = nil)
+  def initialize(entries, pagy = nil)
     @entries = entries
-    @assets  = assets
     @pagy    = pagy
   end
 
@@ -48,7 +47,8 @@ class EntrySerializer
         }
       end,
       includes: {
-        Asset: AssetSerializer.new(@assets).to_json
+        Asset: IncludesSerializer.new(@entries.flat_map(&:linked_entries).select(&:asset?)).to_json,
+        Entry: IncludesSerializer.new(@entries.flat_map(&:linked_entries).select(&:entry?)).to_json
       }
     }
   end

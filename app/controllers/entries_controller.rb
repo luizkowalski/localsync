@@ -3,15 +3,12 @@ class EntriesController < ApplicationController
 
   def index
     @pagy, @entries = pagy(
-      Entry.entry.where(space: @space).includes(:space, :environment).order(created_at: :desc),
+      Entry.entry.where(space: @space).preload(:space, :environment, linked_entries: [ :space, :environment ]).order(created_at: :desc),
       page: page_param,
       limit: limit_param
     )
 
-    # For the assets, get only asset-type entries that are linked to the paginated entries we will display
-    @assets = Entry.asset.where(id: Link.where(entry_id: @entries.load.ids).pluck(:linked_entry_id)).includes(:space, :environment)
-
-    render json: EntrySerializer.new(@entries, @assets, @pagy).to_json
+    render json: EntrySerializer.new(@entries, @pagy).to_json
   end
 
   private
