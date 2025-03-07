@@ -1,5 +1,5 @@
 module Contentful
-  class Entry
+  class EntryOrAsset
     def initialize(data, space)
       @data = data
       @space = space
@@ -8,7 +8,7 @@ module Contentful
     def sync
       case entry_type
       when "entry", "asset"
-        ::Entry.find_or_initialize_by(contentful_id:, space:, entry_type:).update!(upstream_data)
+        ::Entry.find_or_initialize_by(contentful_id:, space:, entry_type:, environment:).update!(upstream_data)
       when /^Deleted/
         ::Entry.find_by(contentful_id: contentful_id, space:)&.destroy
       end
@@ -27,32 +27,7 @@ module Contentful
     end
 
     def environment
-      @environment ||= Environment.find_or_create_by!(contentful_id: data.dig("sys", "environment", "sys", "id"), space:)
-    end
-
-    def links(hash: data["fields"])
-      return [] unless hash
-
-      extract_links(hash)
-    end
-
-    def extract_links(value)
-      links = []
-
-      case value
-      when Hash
-        links << value if value["sys"]
-
-        value.each_value do |v|
-          links.concat(extract_links(v))
-        end
-      when Array
-        value.each do |item|
-          links.concat(extract_links(item))
-        end
-      end
-
-      links
+      Environment.find_or_create_by!(contentful_id: data.dig("sys", "environment", "sys", "id"), space:)
     end
 
     def upstream_data
@@ -62,9 +37,7 @@ module Contentful
         content_type_id: data.dig("sys", "contentType", "sys", "id"),
         published_version: data["sys"]["publishedVersion"],
         revision: data["sys"]["revision"],
-        fields: data["fields"],
-        environment:,
-        space:
+        fields: data["fields"]
       }
     end
   end

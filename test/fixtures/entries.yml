@@ -1,6 +1,7 @@
 entry:
   entry_type: entry
   space: synced
+  environment: master
   contentful_id: asjd981j2
   content_type_id: an1th1ng
   published_version: 1
@@ -9,6 +10,7 @@ entry:
 asset:
   entry_type: asset
   space: synced
+  environment: master
   contentful_id: asjd981j3
   content_type_id: # Assets have no content type id
   published_version: 1

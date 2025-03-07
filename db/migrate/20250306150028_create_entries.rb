@@ -12,5 +12,7 @@ class CreateEntries < ActiveRecord::Migration[8.0]
 
       t.timestamps
     end
+
+    add_index :entries, [ :space_id, :environment_id, :contentful_id ], unique: true
   end
 end

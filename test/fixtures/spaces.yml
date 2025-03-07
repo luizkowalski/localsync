@@ -1,11 +1,9 @@
 synced:
   contentful_id: yadj1kx9rmg0
-  environment: master
   last_synced_at: 2025-03-06 15:37:44
   next_sync_token: "asdf123asd123"
 
 unsynced:
   contentful_id: yadj1kx9rmg1
-  environment: staging
   last_synced_at:
   next_sync_token:

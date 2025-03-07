@@ -26,6 +26,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_06_171035) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["environment_id"], name: "index_entries_on_environment_id"
+    t.index ["space_id", "environment_id", "contentful_id"], name: "index_entries_on_space_id_and_environment_id_and_contentful_id", unique: true
     t.index ["space_id"], name: "index_entries_on_space_id"
   end
 
