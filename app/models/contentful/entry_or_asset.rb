@@ -9,7 +9,7 @@ module Contentful
       case entry_type
       when "entry", "asset"
         ::Entry.find_or_initialize_by(contentful_id:, space:, entry_type:, environment:).update!(upstream_data)
-      when /^Deleted/
+      when /^deleted/i
         ::Entry.find_by(contentful_id: contentful_id, space:)&.destroy
       end
     end

@@ -32,6 +32,13 @@ class EntrySerializer
               revision: entry.revision,
               createdAt: entry.created_at,
               updatedAt: entry.updated_at
+            },
+            environment: {
+              sys: {
+                id: entry.environment.contentful_id,
+                type: "Link",
+                linkType: "Environment"
+              }
             }
           },
           fields: entry.fields

@@ -18,4 +18,7 @@ group :development, :test do
   gem "brakeman", require: false
 
   gem "rubocop-rails-omakase", require: false
+
+  gem "vcr"
+  gem "webmock"
 end
