@@ -2,8 +2,6 @@ class Entity < ApplicationRecord
   belongs_to :space
   belongs_to :environment
 
-  # enum :entry_type, [ "asset", "entry" ].index_by(&:itself)
-
   has_many :links, foreign_key: :entity_id, dependent: :destroy
   has_many :linked_entities, through: :links, source: :linked_entity, dependent: :destroy
 

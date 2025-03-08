@@ -1,7 +1,7 @@
 class EntrySerializer
-  def initialize(entries, assets)
+  def initialize(entries, linked_entities)
     @entries = entries
-    @assets  = assets
+    @linked_entities = linked_entities
   end
 
   def to_json
@@ -45,8 +45,9 @@ class EntrySerializer
         }
       end,
       includes: {
-        Asset: AssetSerializer.new(@assets).to_json
-      }
+        Entries: IncludeSerializer.new(@linked_entities.select { |e| e.type == "Entry" }).to_json,
+        Assets: IncludeSerializer.new(@linked_entities.select { |e| e.type == "Asset" }).to_json
+      }.compact_blank
     }
   end
 end

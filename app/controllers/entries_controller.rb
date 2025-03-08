@@ -3,9 +3,10 @@ class EntriesController < ApplicationController
 
   def index
     @entries = @space.entries.includes(:space, :environment).order(created_at: :desc)
-    @assets  = @space.assets.includes(:space, :environment).order(created_at: :desc)
 
-    render json: EntrySerializer.new(@entries, @assets).to_json
+    @linked_entities = Entity.where(id: @space.links.pluck(:linked_entity_id, :entity_id).flatten.uniq).includes(:space, :environment)
+
+    render json: EntrySerializer.new(@entries, @linked_entities).to_json
   end
 
   private
