@@ -3,11 +3,11 @@ class FullSyncJob < ApplicationJob
 
   def perform(space)
     ActiveRecord::Base.transaction do
-      Link.where(entry: space.entries).or(
-        Link.where(linked_entry: space.entries)
+      Link.where(entity: space.entities).or(
+        Link.where(linked_entity: space.entities)
       ).delete_all
 
-      Entry.where(space:).delete_all
+      space.entities.delete_all
 
       space.sync(full: true)
     end

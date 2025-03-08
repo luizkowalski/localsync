@@ -1,34 +1,34 @@
 module Contentful
   class Link
-    def initialize(entry)
-      @entry = entry
+    def initialize(entity)
+      @entity = entity
     end
 
     # We start by deleting all the links for the entry, then we create the new ones.
     # This is because we don't want to have orphaned links in the database.
     def create
-      ::Link.where(entry:).delete_all
+      ::Link.where(entity:).delete_all
 
       links.each do |link|
-        linked_entry = ::Entry.find_or_initialize_by(
+        linked_entity = ::Entity.find_or_initialize_by(
           contentful_id: link["sys"]["id"],
-          entry_type: link["sys"]["linkType"].downcase,
-          space: entry.space,
-          environment: entry.environment
+          type: link["sys"]["linkType"],
+          space: entity.space,
+          environment: entity.environment
         )
 
-        ::Link.create!(entry:, linked_entry:)
+        ::Link.create!(entity:, linked_entity:)
       end
     end
 
     private
 
-    attr_reader :entry
+    attr_reader :entity
 
     def links
-      return [] unless entry.fields
+      return [] unless entity.fields
 
-      extract_links(entry.fields)
+      extract_links(entity.fields)
     end
 
     def extract_links(value)

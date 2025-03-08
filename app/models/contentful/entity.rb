@@ -1,5 +1,5 @@
 module Contentful
-  class EntryOrAsset
+  class Entity
     def initialize(data, space)
       @data = data
       @space = space
@@ -7,10 +7,12 @@ module Contentful
 
     def sync
       case entry_type
-      when "entry", "asset"
-        ::Entry.find_or_initialize_by(contentful_id:, space:, entry_type:, environment:).update!(upstream_data)
+      when "Entry"
+        ::Entry.find_or_initialize_by(contentful_id:, space:, environment:).update!(upstream_data)
+      when "Asset"
+        ::Asset.find_or_initialize_by(contentful_id:, space:, environment:).update!(upstream_data)
       when /^deleted/i
-        ::Entry.find_by(contentful_id: contentful_id, space:)&.destroy!
+        ::Entity.find_by(contentful_id: contentful_id, space:)&.destroy!
       end
     end
 
@@ -23,7 +25,7 @@ module Contentful
     end
 
     def entry_type
-      data["sys"]["type"].downcase
+      data["sys"]["type"]
     end
 
     def environment

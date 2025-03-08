@@ -2,8 +2,8 @@ class EntriesController < ApplicationController
   before_action :set_space
 
   def index
-    @entries = Entry.entry.where(space: @space).includes(:links, :space, :environment).order(created_at: :desc)
-    @assets  = Entry.asset.where(space: @space).includes(:space, :environment).order(created_at: :desc)
+    @entries = @space.entries.includes(:space, :environment).order(created_at: :desc)
+    @assets  = @space.assets.includes(:space, :environment).order(created_at: :desc)
 
     render json: EntrySerializer.new(@entries, @assets).to_json
   end

@@ -14,8 +14,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_06_171035) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
-  create_table "entries", force: :cascade do |t|
-    t.string "entry_type"
+  create_table "entities", force: :cascade do |t|
+    t.string "type"
     t.bigint "space_id", null: false
     t.bigint "environment_id", null: false
     t.string "contentful_id"
@@ -25,9 +25,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_06_171035) do
     t.jsonb "fields"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["environment_id"], name: "index_entries_on_environment_id"
-    t.index ["space_id", "environment_id", "contentful_id"], name: "index_entries_on_space_id_and_environment_id_and_contentful_id", unique: true
-    t.index ["space_id"], name: "index_entries_on_space_id"
+    t.index ["environment_id"], name: "index_entities_on_environment_id"
+    t.index ["space_id", "environment_id", "contentful_id"], name: "idx_on_space_id_environment_id_contentful_id_712bf2965b", unique: true
+    t.index ["space_id"], name: "index_entities_on_space_id"
   end
 
   create_table "environments", force: :cascade do |t|
@@ -129,13 +129,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_06_171035) do
   end
 
   create_table "links", force: :cascade do |t|
-    t.bigint "entry_id", null: false
-    t.bigint "linked_entry_id", null: false
+    t.bigint "entity_id", null: false
+    t.bigint "linked_entity_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["entry_id", "linked_entry_id"], name: "index_links_on_entry_id_and_linked_entry_id", unique: true
-    t.index ["entry_id"], name: "index_links_on_entry_id"
-    t.index ["linked_entry_id"], name: "index_links_on_linked_entry_id"
+    t.index ["entity_id", "linked_entity_id"], name: "index_links_on_entity_id_and_linked_entity_id", unique: true
+    t.index ["entity_id"], name: "index_links_on_entity_id"
+    t.index ["linked_entity_id"], name: "index_links_on_linked_entity_id"
   end
 
   create_table "spaces", force: :cascade do |t|
@@ -148,9 +148,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_06_171035) do
     t.index ["contentful_id"], name: "index_spaces_on_contentful_id", unique: true
   end
 
-  add_foreign_key "entries", "environments"
-  add_foreign_key "entries", "spaces"
+  add_foreign_key "entities", "environments"
+  add_foreign_key "entities", "spaces"
   add_foreign_key "environments", "spaces"
-  add_foreign_key "links", "entries"
-  add_foreign_key "links", "entries", column: "linked_entry_id"
+  add_foreign_key "links", "entities"
+  add_foreign_key "links", "entities", column: "linked_entity_id"
 end

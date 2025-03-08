@@ -1,6 +1,6 @@
 class Link < ApplicationRecord
-  belongs_to :entry
-  belongs_to :linked_entry, class_name: "Entry"
+  belongs_to :entity
+  belongs_to :linked_entity, class_name: "Entity"
 
-  validates :entry_id, uniqueness: { scope: :linked_entry_id }
+  validates :entity_id, uniqueness: { scope: :linked_entity_id }
 end

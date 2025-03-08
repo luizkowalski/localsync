@@ -9,7 +9,7 @@ class EntrySerializer
       sys: {
         type: "Array"
       },
-      total: @entries.count,
+      total: @entries.size,
       items: @entries.map do |entry|
         {
           sys: {
@@ -21,7 +21,7 @@ class EntrySerializer
               }
             },
             id: entry.contentful_id,
-            type: entry.entry_type.titleize,
+            type: entry.type,
             contentType: {
               sys: {
                 id: entry.content_type_id,
