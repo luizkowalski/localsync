@@ -31,7 +31,7 @@ module DeltaUpdate
     end
 
     test "when pulling a delta update for a space, it should reflect the changes in the entries" do
-      assert_changes "Entry.entry.count", from: 1, to: 2 do
+      assert_changes "Entry.count", from: 1, to: 2 do
         SyncJob.perform_now(@space)
       end
     end

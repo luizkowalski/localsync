@@ -2,7 +2,7 @@ require "test_helper"
 
 class SynchronizationTest < ActionDispatch::IntegrationTest
   test "when fully syncing a space, it should create the correct number of entries" do
-    assert_changes "Entry.entry.count", from: 1, to: 13 do
+    assert_changes "Entry.count", from: 1, to: 13 do
       VCR.use_cassette("spaces/yadj1kx9rmg0/full_sync") do
         FullSyncJob.perform_now(spaces(:synced))
       end
@@ -10,7 +10,7 @@ class SynchronizationTest < ActionDispatch::IntegrationTest
   end
 
   test "when fully syncing a space, it should create the correct number of assets" do
-    assert_changes "Entry.asset.count", from: 1, to: 11 do
+    assert_changes "Asset.count", from: 1, to: 11 do
       VCR.use_cassette("spaces/yadj1kx9rmg0/full_sync") do
         FullSyncJob.perform_now(spaces(:synced))
       end

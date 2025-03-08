@@ -1,5 +1,5 @@
 entry:
-  entry_type: entry
+  type: Entry
   space: synced
   environment: master
   contentful_id: asjd981j2
@@ -9,7 +9,7 @@ entry:
   revision: 2
 
 asset:
-  entry_type: asset
+  type: Asset
   space: synced
   environment: master
   contentful_id: asjd981j3

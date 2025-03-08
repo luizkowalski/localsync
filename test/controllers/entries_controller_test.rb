@@ -9,7 +9,7 @@ class EntriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "entries should conform to the expected schema" do
-    entry = entries(:entry)
+    entry = entities(:entry)
     space = spaces(:synced)
 
     get space_entries_url(space.contentful_id)

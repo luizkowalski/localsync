@@ -4,7 +4,7 @@ module DeltaUpdate
   class SynchronizationUpdatedTest < ActionDispatch::IntegrationTest
     setup do
       @space = spaces(:synced)
-      @entry = entries(:entry)
+      @entity = entities(:entry)
 
       stub_request(:get, "https://cdn.contentful.com/spaces/yadj1kx9rmg0/sync?access_token=#{@space.access_token}&sync_token=#{@space.next_sync_token}")
         .to_return(status: 200, body: {
@@ -12,7 +12,7 @@ module DeltaUpdate
           "items" => [
             {
               "sys" => {
-                "id" => @entry.contentful_id,
+                "id" => @entity.contentful_id,
                 "type" => "Entry",
                 "createdAt" => "2021-01-01T00:00:00.000Z",
                 "updatedAt" => "2021-01-01T00:00:00.000Z",
@@ -21,7 +21,7 @@ module DeltaUpdate
                 "fields" => {},
                 "environment" => {
                   "sys" => {
-                    "id" => @entry.environment.contentful_id,
+                    "id" => @entity.environment.contentful_id,
                     "type" => "Environment"
                   }
                 }
@@ -32,7 +32,7 @@ module DeltaUpdate
     end
 
     test "when pulling a delta update for a space, it should reflect the changes in the entries" do
-      assert_changes "@entry.reload.revision", from: 2, to: 99 do
+      assert_changes "@entity.reload.revision", from: 2, to: 99 do
         SyncJob.perform_now(@space)
       end
     end
